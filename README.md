@@ -1,4 +1,32 @@
-#我的解决方案
+可以选择拉这个仓库里的或者直接方案2试试我当时的步骤
+```
+2
+├── DroneCompetition/   (ROS2 工作空间)
+└── ardupilot_gazebo/   (模型和插件源码)
+```
+方案一：
+直接拉仓库，拉完后可以运行下面脚本安装依赖编译和环境变量。
+```
+#!/bin/bash
+set -e
+sudo apt update
+sudo apt install -y cmake build-essential libgz-sim8-dev
+sudo apt install -y ros-jazzy-mavros ros-jazzy-mavros-extras ros-jazzy-geometry-msgs
+cd ~/ardupilot_gazebo
+mkdir -p build && cd build
+cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo
+make -j4
+sudo make install
+grep -qxF 'export GZ_SIM_SYSTEM_PLUGIN_PATH=$HOME/ardupilot_gazebo/build:$GZ_SIM_SYSTEM_PLUGIN_PATH' ~/.bashrc || echo 'export GZ_SIM_SYSTEM_PLUGIN_PATH=$HOME/ardupilot_gazebo/build:$GZ_SIM_SYSTEM_PLUGIN_PATH' >> ~/.bashrc
+grep -qxF 'export GZ_SIM_RESOURCE_PATH=$HOME/ardupilot_gazebo/models:$GZ_SIM_RESOURCE_PATH' ~/.bashrc || echo 'export GZ_SIM_RESOURCE_PATH=$HOME/ardupilot_gazebo/models:$GZ_SIM_RESOURCE_PATH' >> ~/.bashrc
+export GZ_SIM_SYSTEM_PLUGIN_PATH=$HOME/ardupilot_gazebo/build:$GZ_SIM_SYSTEM_PLUGIN_PATH
+export GZ_SIM_RESOURCE_PATH=$HOME/ardupilot_gazebo/models:$GZ_SIM_RESOURCE_PATH
+cd ~/DroneCompetition
+colcon build --symlink-install
+echo "Setup completed. Please restart terminal or run 'source ~/.bashrc'"
+```
+方案2：
+我的解决如下：
 （删除目前残留,可以自行备份）
 ```
 cd ~
@@ -32,7 +60,7 @@ sleep 5
 gnome-terminal --tab --title="mavros" -- bash -c "ros2 launch mavros apm.launch fcu_url:=udp://:14550@; exec bash"
 sleep 3
 ```
-启动的时候ardu的窗口里面反复出现下面这段，并且可以在地图上看到家标志
+启动的时候ardu的窗口里面反复出现下面这段（一定！），并且可以在地图上看到家标志(等他冒冒完吧，我后来试了几次好像早一点都会失败TwT)如果出现了一些说什么in（错误的前缀）的话可以重新再来一次）。
 ```
 no link
 link 1 down
