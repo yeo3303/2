@@ -1,0 +1,17 @@
+# 编译产物
+build/
+install/
+log/
+*.o
+*.so
+*.a
+*.pyc
+__pycache__/
+
+# IDE 配置
+.vscode/
+.idea/
+
+# 临时文件
+*.swp
+*~

@@ -1,0 +1,7 @@
+launch:
+
+- node:
+    pkg: "double_gps_test"
+    exec: "test_flight"
+    name: "test_flight"
+    output: "screen"
